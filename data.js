@@ -1,5 +1,6 @@
 export default data = [
     {
+        id: 1,
         name: "Plan a trip",
         color: '#039290',
         todos:[
@@ -27,6 +28,7 @@ export default data = [
         ]
     },
     {
+        id:2,
         name: "Prepare Exam",
         color: '#022290',
         todos:[
@@ -54,6 +56,7 @@ export default data = [
         ]
     },
     {
+        id:3,
         name: "Took a job",
         color: '#039210',
         todos:[
@@ -67,6 +70,4 @@ export default data = [
             },
         ]
     },
-
-
-]
+];

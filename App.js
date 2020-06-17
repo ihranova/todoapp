@@ -17,7 +17,9 @@ import {
   ColorPropType,
   TouchableOpacity,
   FlatList,
-  Modal
+  Modal,
+  KeyboardAvoidingView,
+  TextInput
 } from 'react-native';
 import colors from './Colors';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -27,16 +29,27 @@ import AddListModal from './components/AddListModal';
 
 class App extends React.Component{
   state = {
-    addTodoVisible: false
+    addTodoVisible: false,
+    lists: data
   }
   toggleAddTodoModal(){
     this.setState({addTodoVisible:!this.state.addTodoVisible});
+  }
+  addList = list =>{
+    this.setState({lists: [...this.state.lists, {...list, id:this.state.lists.length + 1, todos: []}]})
+  }
+  updateList = list =>{
+    this.setState({
+      lists:this.state.lists.map(item=>{
+        return item.id === list.id ? list : item;
+      })
+    })
   }
    render(){
     return (
       <View style = {styles.container}>
         <Modal animationType="slide" visible = {this.state.addTodoVisible} onRequestClose = {()=>this.toggleAddTodoModal()}>
-          <AddListModal closeModal = {()=>this.toggleAddTodoModal()}/>
+          <AddListModal closeModal = {()=>this.toggleAddTodoModal()} addList = {this.addList}/>
         </Modal>
         <View style = {{flexDirection:'row'}}>
           <View style = {styles.divider} />
@@ -52,11 +65,16 @@ class App extends React.Component{
 
         </View>
         <View style = {{height:275,paddingLeft:40}}>
-          <FlatList data = {data} keyExtractor = {item => item.name} horizontal = {true} showsHorizontalScrollIndicator = {false}
+          <FlatList data = {this.state.lists} 
+          keyExtractor = {item => item.name} 
+          horizontal = {true} 
+          showsHorizontalScrollIndicator = {false}
+          keyboardShouldPersistTaps = "always"
           renderItem = {({item})=> (
-           <TodoList list = {item}/>
+           <TodoList list = {item} updateList = {this.updateList}/>
           )}/>
         </View>
+    
       </View>
     );
    }
