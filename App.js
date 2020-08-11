@@ -19,33 +19,73 @@ import {
   FlatList,
   Modal,
   KeyboardAvoidingView,
-  TextInput
+  TextInput,
+  ActivityIndicator
 } from 'react-native';
 import colors from './Colors';
 import Icon from 'react-native-vector-icons/AntDesign';
 import data from './data';
 import TodoList from './components/TodoList';
 import AddListModal from './components/AddListModal';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+
+import Fire from './Fire';
 
 class App extends React.Component{
   state = {
     addTodoVisible: false,
-    lists: data
+    lists: [],
+    user:{},
+    loading: true
+  }
+  componentDidMount(){
+    firebase = new Fire((error, user)=>{
+      if(error){
+        return alert("Uh, something went wrong!")
+      }
+      firebase.getLists(lists => {
+        this.setState({lists}, ()=>{
+            this.setState({loading: false})
+        });
+      });
+
+      this.setState({user})
+    });
+  }
+
+  componentWillUnmount(){
+    firebase.detach();
   }
   toggleAddTodoModal(){
     this.setState({addTodoVisible:!this.state.addTodoVisible});
   }
   addList = list =>{
-    this.setState({lists: [...this.state.lists, {...list, id:this.state.lists.length + 1, todos: []}]})
+    //this.setState({lists: [...this.state.lists, {...list, id:this.state.lists.length + 1, todos: []}]})
+    firebase.addList({
+      name: list.name,
+      color: list.color,
+      todos:[]
+    })
+    
   }
   updateList = list =>{
-    this.setState({
+    /*this.setState({
       lists:this.state.lists.map(item=>{
         return item.id === list.id ? list : item;
       })
-    })
+    })*/
+    firebase.updateList(list);
   }
    render(){
+     //console.log(this.state.lists);
+     if(this.state.loading){
+       return(
+         <View>
+           <ActivityIndicator size = "large" color = {colors.blue} />
+         </View>
+       )
+     }
     return (
       <View style = {styles.container}>
         <Modal animationType="slide" visible = {this.state.addTodoVisible} onRequestClose = {()=>this.toggleAddTodoModal()}>
@@ -55,6 +95,9 @@ class App extends React.Component{
           <View style = {styles.divider} />
           <Text style = {styles.title}>Todo <Text style = {{fontWeight:'300',color:colors.red}}>Lists</Text></Text>
           <View style = {styles.divider} />
+        </View>
+        <View>
+           <Text>User: {this.state.user.uid}</Text>
         </View>
 
         <View style = {{marginVertical:30}}>
@@ -66,7 +109,7 @@ class App extends React.Component{
         </View>
         <View style = {{height:275,paddingLeft:40}}>
           <FlatList data = {this.state.lists} 
-          keyExtractor = {item => item.name} 
+          keyExtractor = {item => item.id.toString()} 
           horizontal = {true} 
           showsHorizontalScrollIndicator = {false}
           keyboardShouldPersistTaps = "always"

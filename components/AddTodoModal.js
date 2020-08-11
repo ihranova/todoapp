@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, FlatList, KeyboardAvoidingView, TextInput, Keyboard } from 'react-native';
+import { View, Animated, Text, SafeAreaView, StyleSheet, TouchableOpacity, FlatList, KeyboardAvoidingView, TextInput, Keyboard } from 'react-native';
 import Colors from '../Colors';
 import Icon from 'react-native-vector-icons/AntDesign';
-import Ionicons from 'react-native-vector-icons/Ionicons'
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import {Swipeable} from 'react-native-gesture-handler';
 
 class AddTodoModal extends Component {
   state = {
@@ -59,7 +60,7 @@ class AddTodoModal extends Component {
           <View style={[styles.section, { flex: 3 }]}>
             <FlatList data={list.todos}
               contentContainerStyle={{ paddingHorizontal: 30, paddingVertical: 60 }}
-              renderItem={this.renderTodo} keyExtractor={item => item.title} />
+              renderItem={this.renderTodo} keyExtractor={(_, index) => index.toString()} />
           </View>
           <View style={[styles.section, styles.footer]}>
             <TextInput style={[styles.input, { borderColor: list.color }]} onChangeText = {text=>this.setState({newTodo:text})} value = {this.state.newTodo}/>
