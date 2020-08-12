@@ -20,16 +20,29 @@ class AddTodoModal extends Component {
   renderTodo = ({ item, index }) => {
     //console.log(item);
     return (
-      <View style={styles.todoContainer}>
-        <TouchableOpacity style={styles.todobutton} onPress = {()=> this.toggleTodoComplected(index)}>
-          <Ionicons name={item.complected ? 'ios-square' : "ios-square-outline"} size={24} color={item.complected ? colors.lightGray : colors.black} />
-          <Text style={[styles.todo, { color: item.complected ? colors.lightGray : colors.black, textDecorationLine: item.complected ? "line-through" : "none" }]}>{item.title}</Text>
-        </TouchableOpacity>
-
-      </View>
+      <Swipeable renderRightActions={(_,dragX) => this.rightActions(dragX,index)}>
+        <View style={styles.todoContainer}>
+          <TouchableOpacity style={styles.todobutton} onPress = {()=> this.toggleTodoComplected(index)}>
+            <Ionicons name={item.complected ? 'ios-square' : "ios-square-outline"} size={24} color={item.complected ? colors.lightGray : colors.black} />
+            <Text style={[styles.todo, { color: item.complected ? colors.lightGray : colors.black, textDecorationLine: item.complected ? "line-through" : "none" }]}>{item.title}</Text>
+          </TouchableOpacity>
+        </View>
+      </Swipeable>
     );
   };
+  rightActions = (dragX,index)=>{
+    return(
+      <TouchableOpacity style={{backgroundColor:"#6B090B",width:50, justifyContent:'center',alignItems:"center"}} onPress = {()=>this.deleteTodo(index)}>
+          <Ionicons name = "ios-trash" color = "#fff" size = {30} />
+      </TouchableOpacity>
+    )
 
+  }
+  deleteTodo = (index) =>{
+     let list = this.props.list;
+     list.todos.splice(index,1);
+     this.props.updateList(list);
+  }
   addTodo = () =>{
     let list = this.props.list;
     list.todos.push({title:this.state.newTodo, complected: false});
