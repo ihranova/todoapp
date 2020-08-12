@@ -93,16 +93,13 @@ class App extends React.Component{
         </Modal>
         <View style = {{flexDirection:'row'}}>
           <View style = {styles.divider} />
-          <Text style = {styles.title}>Todo <Text style = {{fontWeight:'300',color:colors.red}}>Lists</Text></Text>
+          <Text style = {styles.title}>Todo <Text style = {{fontWeight:'300',color:colors.blue}}>Lists</Text></Text>
           <View style = {styles.divider} />
-        </View>
-        <View>
-           <Text>User: {this.state.user.uid}</Text>
         </View>
 
         <View style = {{marginVertical:30}}>
           <TouchableOpacity style = {styles.button} onPress = {()=>this.toggleAddTodoModal()}>
-               <Icon name="plus" size={30} color={colors.orange} />
+               <Icon name="plus" size={30} color={colors.blue} />
           </TouchableOpacity>
           <Text style = {styles.add}>Add a list</Text>
 
@@ -146,7 +143,7 @@ const styles = StyleSheet.create({
  },
  button:{
    borderWidth:2,
-   borderColor:colors.orange,
+   borderColor:colors.blue,
    borderRadius:4,
    paddingVertical:10,
    justifyContent:'center',
@@ -155,7 +152,7 @@ const styles = StyleSheet.create({
  add:{
    fontSize:15,
    marginTop:20,
-   color:colors.orange,
+   color:colors.lightblue,
    textAlign:'center',
  }
 
