@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
  add:{
    fontSize:15,
    marginTop:20,
-   color:colors.lightblue,
+   color:colors.lcightblue,
    textAlign:'center',
  }
 
